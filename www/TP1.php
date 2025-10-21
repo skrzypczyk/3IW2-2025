@@ -76,11 +76,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // verif si le mdp n'est pas vide et correspond a 8 carac minimum
+    // verif si le mdp n'est pas vide et correspond a 12 carac minimum
     if (empty($password)) {
         $errors[] = "Le mdp est obligatoire";
-    } elseif (strlen($password) < 8) {
-        $errors[] = "Le mdp est trop court (minim 8 carac)";
+    } elseif (strlen($password) < 12) {
+        $errors[] = "Le mdp est trop court (minim 12 carac)";
+    }
+    
+    // Exigences de complexité
+    if (!preg_match('/[a-z]/', $password)) {
+        $errors[] = "Doit contenir au moins une lettre minuscule";
+    }
+    if (!preg_match('/[A-Z]/', $password)) {
+        $errors[] = "Doit contenir au moins une lettre majuscule";
+    }
+    if (!preg_match('/\d/', $password)) {
+        $errors[] = "Doit contenir au moins un chiffre";
+    }
+    if (!preg_match('/[^a-zA-Z0-9]/', $password)) {
+        $errors[] = "Doit contenir au moins un caractère spécial";
     }
 
     // verif si le mdp et mdp2 sont identiques
