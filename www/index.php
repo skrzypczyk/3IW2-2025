@@ -27,13 +27,21 @@ namespace App;
 
 
 
-spl_autoload_register("App\\calledIfInstanceWithoutClass");
-function calledIfInstanceWithoutClass($class){
-    //Créer le code permettant d'aller chercher dans
-    //le dossier Helpers la classe qui a engendré une erreur
-    echo "Le problème vient de l'instance de la classe ".$class;
-}
+spl_autoload_register(function ($class){
+        // App\Helper\Errors
+        //Créer le code permettant d'aller chercher dans
+        //le dossier Helpers la classe qui a engendré une erreur
+        $namespaceArray = [
+                            "namepace"=> ["App\\Helper\\", "App\\Core\\"],
+                            "path"=> ["Helpers/", "Core/"],
+                        ];
+        $filname = str_ireplace($namespaceArray['namepace'],$namespaceArray['path'], $class  ). ".php";
+        if(file_exists($filname)) {
+            include $filname;
+        }
 
+    }
+);
 
 
 
